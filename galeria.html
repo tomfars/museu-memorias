@@ -134,7 +134,7 @@
 <body>
   <div class="poeira"></div>
 
-  <audio id="ambiente" autoplay loop>
+  <audio id="ambiente">
     <source src="https://cdn.pixabay.com/audio/2022/03/30/audio_59f83d8b49.mp3" type="audio/mpeg">
   </audio>
 
@@ -219,6 +219,14 @@
     function voltarInicio() {
       window.location.href = 'index.html';
     }
+
+    // Iniciar música após primeira interação
+    document.addEventListener('click', () => {
+      const audio = document.getElementById('ambiente');
+      if (audio.paused) {
+        audio.play().catch(e => console.log('Reprodução de áudio bloqueada:', e));
+      }
+    }, { once: true });
   </script>
 </body>
 </html>
