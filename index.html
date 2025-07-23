@@ -1,205 +1,121 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Museu das Memórias – Início</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Museu das Memórias</title>
   <style>
     body {
-      margin: 0; padding: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      margin: 0;
+      padding: 0;
       font-family: 'Georgia', serif;
-      background: linear-gradient(135deg, #dcdcdc, #f5f5f5);
-      color: #333;
-      overflow: hidden;
-      position: relative;
-      transition: background 0.5s ease;
+      background: linear-gradient(to bottom, #f0ece6, #f9f9f9);
+      overflow-x: hidden;
     }
 
-    body.escuro {
-      background: #111;
-      color: #eee;
+    .container {
+      max-width: 700px;
+      margin: 60px auto;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 12px;
+      box-shadow: 0 0 18px rgba(0,0,0,0.1);
+    }
+
+    .container h1 {
+      font-size: 1.6rem;
+      color: #5c3d2e;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .container p {
+      font-size: 1rem;
+      line-height: 1.7;
+      text-align: justify;
+      color: #3a3a3a;
+    }
+
+    .relato-form {
+      margin-top: 30px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    textarea {
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      resize: vertical;
+      min-height: 120px;
+      background: #fffdf9;
+      font-family: 'Georgia', serif;
+    }
+
+    button {
+      margin-top: 16px;
+      padding: 12px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 10px;
+      background-color: #a2805c;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #8e6c47;
     }
 
     .poeira {
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       pointer-events: none;
       background-image: url('https://www.transparenttextures.com/patterns/foggy-birds.png');
-      opacity: 0.15;
+      opacity: 0.1;
       z-index: 0;
-    }
-
-    .container {
-      z-index: 1;
-      max-width: 600px;
-      width: 90%;
-      text-align: center;
-      background: rgba(255,255,255,0.85);
-      padding: 30px 25px;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
-      backdrop-filter: blur(5px);
-    }
-
-    body.escuro .container {
-      background: rgba(20,20,20,0.85);
-      color: #eee;
-    }
-
-    h1 {
-      font-weight: 400;
-      font-size: 1.2rem;
-      margin-bottom: 20px;
-      line-height: 1.4;
-    }
-
-    textarea {
-      width: 100%;
-      height: 150px;
-      padding: 12px;
-      font-size: 1rem;
-      border-radius: 8px;
-      border: 1px solid #aaa;
-      resize: vertical;
-      font-family: 'Georgia', serif;
-      transition: border-color 0.3s;
-    }
-
-    textarea:focus {
-      border-color: #555;
-      outline: none;
-    }
-
-    button {
-      margin-top: 15px;
-      padding: 10px 25px;
-      font-size: 1rem;
-      border: none;
-      border-radius: 8px;
-      background-color: #4a90e2;
-      color: white;
-      cursor: pointer;
-      font-family: 'Georgia', serif;
-      transition: background-color 0.3s;
-    }
-
-    button:hover {
-      background-color: #357abd;
-    }
-
-    .botoes {
-      position: fixed;
-      top: 10px;
-      right: 10px;
-      z-index: 10;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .botoes button {
-      position: relative;
-      padding: 8px 12px;
-      background: rgba(255,255,255,0.8);
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-family: 'Georgia', serif;
-      transition: background 0.3s, transform 0.3s;
-      animation: pulse 2s infinite alternate;
-    }
-
-    .botoes button:hover {
-      background: rgba(200,200,200,0.8);
-      transform: scale(1.1);
-    }
-
-    @keyframes pulse {
-      0% { box-shadow: 0 0 5px rgba(0,0,0,0.2); }
-      100% { box-shadow: 0 0 15px rgba(0,0,0,0.4); }
-    }
-
-    /* Tooltip */
-    .botoes button[data-tooltip]:hover::after {
-      content: attr(data-tooltip);
-      position: absolute;
-      bottom: 130%;
-      right: 50%;
-      transform: translateX(50%);
-      background: rgba(0, 0, 0, 0.75);
-      color: white;
-      padding: 5px 8px;
-      border-radius: 4px;
-      white-space: nowrap;
-      font-size: 0.8rem;
-      pointer-events: none;
-      opacity: 1;
-      transition: opacity 0.3s ease;
-      z-index: 20;
     }
   </style>
 </head>
 <body>
   <div class="poeira"></div>
 
-  <div class="botoes">
-    <button onclick="alternarTema()" data-tooltip="Alterna entre fundo claro e escuro">🌙 Alternar fundo</button>
-    <button onclick="alternarSom()" data-tooltip="Liga ou desliga o som ambiente">🔇 Mutar/Desmutar</button>
-  </div>
-
   <div class="container">
-    <h1>
-      <strong>“Nada se perde, nada se cria, tudo se transforma.”</strong>
-    Como objetos que repousam em fundos de gavetas, armários, caixas de papelão — as memórias também ficam guardadas em nós, mesmo que invisíveis. O que era útil, indispensável, torna-se obsoleto, descartável. Mas há quem recicle objetos... assim como há quem recicle lembranças.<br><br>
-    Traga à tona algo (ou alguém) que já fez parte da sua vida, que você não tem mais, mas que ainda vive em você. Aqui, palavras transformam saudades em presença.
+    <h1>“Nada se perde, nada se cria, tudo se transforma.”</h1>
+    <p>
+      Como objetos que repousam em fundos de gavetas, armários, caixas de papelão — as memórias também ficam guardadas em nós, mesmo que invisíveis. O que era útil, indispensável, torna-se obsoleto, descartável. Mas há quem recicle objetos... assim como há quem recicle lembranças.
+    </p>
+    <p>
+      Traga à tona algo (ou alguém) que já fez parte da sua vida, que você não tem mais, mas que ainda vive em você. Aqui, palavras transformam saudades em presença.
+    </p>
 
-    </h1>
-    <form id="formRelato">
-      <textarea id="relato" placeholder="Escreva seu relato aqui..." required></textarea>
-      <br />
-      <button type="submit">Enviar Memória</button>
+    <form class="relato-form" onsubmit="enviarRelato(event)">
+      <textarea id="relato" placeholder="Escreva sua memória aqui..."></textarea>
+      <button type="submit">Enviar memória</button>
     </form>
   </div>
 
   <audio id="ambiente" autoplay loop>
-    <source src="https://cdn.pixabay.com/audio/2022/10/20/audio_e43f6f30ce.mp3" type="audio/mpeg" />
+    <source src="https://cdn.pixabay.com/audio/2022/10/20/audio_e43f6f30ce.mp3" type="audio/mpeg">
   </audio>
 
   <script>
-    const body = document.body;
-    const audioAmbiente = document.getElementById('ambiente');
+    function enviarRelato(event) {
+      event.preventDefault();
+      const texto = document.getElementById('relato').value;
+      if (!texto.trim()) return;
 
-    function alternarTema() {
-      body.classList.toggle('escuro');
-    }
-
-    function alternarSom() {
-      audioAmbiente.muted = !audioAmbiente.muted;
-    }
-
-    const form = document.getElementById('formRelato');
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const texto = document.getElementById('relato').value.trim();
-      if (!texto) return alert('Por favor, escreva seu relato.');
-
-      // Pega memórias antigas ou cria array vazio
-      let memorias = JSON.parse(localStorage.getItem('memorias')) || [];
-
-      // Adiciona nova memória
-      memorias.push({ texto, imagemUrl: '' }); // imagemUrl fica vazio pois não há API de imagem aqui
-
-      // Salva no localStorage
+      const memorias = JSON.parse(localStorage.getItem('memorias')) || [];
+      memorias.push({ texto });
       localStorage.setItem('memorias', JSON.stringify(memorias));
 
-      // Redireciona para a página da galeria
       window.location.href = 'galeria.html';
-    });
+    }
   </script>
 </body>
 </html>
