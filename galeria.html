@@ -11,6 +11,7 @@
       --cor-texto: #2e2e2e;
       --cor-caixa: rgba(255, 255, 255, 0.8);
       --cor-botao: #d8c3a5;
+      --cor-destaque: #ffcb9a;
     }
 
     body.dark-mode {
@@ -18,6 +19,7 @@
       --cor-texto: #f1f1f1;
       --cor-caixa: rgba(50, 50, 50, 0.85);
       --cor-botao: #a67c52;
+      --cor-destaque: #ff9f68;
     }
 
     body {
@@ -55,6 +57,12 @@
       box-shadow: 0 0 14px rgba(0, 0, 0, 0.1);
       animation: flutuar 18s ease-in-out infinite;
       cursor: pointer;
+      transition: transform 0.3s, background 0.3s;
+    }
+
+    .memoria.destaque {
+      transform: scale(1.05);
+      background-color: var(--cor-destaque) !important;
     }
 
     .memoria[data-tipo="triste"] {
@@ -143,7 +151,7 @@
   <script>
     const memorias = JSON.parse(localStorage.getItem('memorias')) || [];
     let leituraAtiva = false;
-    let sinteseAtual;
+    let memoriaAtual = null;
 
     function classificarMemoria(texto) {
       const categorias = {
@@ -175,6 +183,7 @@
         if (leituraAtiva) {
           speechSynthesis.cancel();
           leituraAtiva = false;
+          if (memoriaAtual) memoriaAtual.classList.remove('destaque');
         } else {
           const utterance = new SpeechSynthesisUtterance(memoria.texto);
           utterance.lang = 'pt-BR';
@@ -183,8 +192,13 @@
           else if (tipo === 'nostálgica') { utterance.pitch = 1.0; utterance.rate = 0.95; }
           else if (tipo === 'reflexiva') { utterance.pitch = 1.1; utterance.rate = 1.0; }
           else if (tipo === 'surpresa') { utterance.pitch = 1.5; utterance.rate = 1.15; }
-          utterance.onend = () => { leituraAtiva = false; };
+          utterance.onend = () => {
+            leituraAtiva = false;
+            if (memoriaAtual) memoriaAtual.classList.remove('destaque');
+          };
           leituraAtiva = true;
+          memoriaAtual = div;
+          div.classList.add('destaque');
           speechSynthesis.speak(utterance);
         }
       };
