@@ -109,6 +109,8 @@
       cursor: pointer;
       font-size: 1rem;
       transition: background 0.3s;
+      display: flex;
+      align-items: center;
     }
 
     .botoes button:hover {
@@ -116,7 +118,8 @@
     }
 
     .botoes i {
-      margin-right: 5px;
+      margin-right: 6px;
+      font-size: 1.2rem;
     }
   </style>
 </head>
@@ -139,6 +142,8 @@
 
   <script>
     const memorias = JSON.parse(localStorage.getItem('memorias')) || [];
+    let leituraAtiva = false;
+    let sinteseAtual;
 
     function classificarMemoria(texto) {
       const categorias = {
@@ -167,14 +172,21 @@
       div.textContent = memoria.texto;
 
       div.onclick = () => {
-        const utterance = new SpeechSynthesisUtterance(memoria.texto);
-        utterance.lang = 'pt-BR';
-        if (tipo === 'triste') { utterance.pitch = 0.8; utterance.rate = 0.9; }
-        else if (tipo === 'alegre') { utterance.pitch = 1.3; utterance.rate = 1.05; }
-        else if (tipo === 'nostálgica') { utterance.pitch = 1.0; utterance.rate = 0.95; }
-        else if (tipo === 'reflexiva') { utterance.pitch = 1.1; utterance.rate = 1.0; }
-        else if (tipo === 'surpresa') { utterance.pitch = 1.5; utterance.rate = 1.15; }
-        speechSynthesis.speak(utterance);
+        if (leituraAtiva) {
+          speechSynthesis.cancel();
+          leituraAtiva = false;
+        } else {
+          const utterance = new SpeechSynthesisUtterance(memoria.texto);
+          utterance.lang = 'pt-BR';
+          if (tipo === 'triste') { utterance.pitch = 0.8; utterance.rate = 0.9; }
+          else if (tipo === 'alegre') { utterance.pitch = 1.3; utterance.rate = 1.05; }
+          else if (tipo === 'nostálgica') { utterance.pitch = 1.0; utterance.rate = 0.95; }
+          else if (tipo === 'reflexiva') { utterance.pitch = 1.1; utterance.rate = 1.0; }
+          else if (tipo === 'surpresa') { utterance.pitch = 1.5; utterance.rate = 1.15; }
+          utterance.onend = () => { leituraAtiva = false; };
+          leituraAtiva = true;
+          speechSynthesis.speak(utterance);
+        }
       };
 
       document.body.appendChild(div);
